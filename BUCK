@@ -23,7 +23,6 @@ def r_android_library(name, srcs=[], resources=[], exported_deps=[],
         resources = resources,
         exported_deps = exported_deps,
         deps = [
-          # This assumes this is where Guava is in your project.
           ':fetch_deps',
         ] + deps,
         visibility = visibility,
@@ -129,11 +128,6 @@ android_prebuilt_aar(
 )
 
 android_prebuilt_aar(
-    name = 'undobar',
-    aar = 'extlibs/undobar.aar',
-)
-
-android_prebuilt_aar(
     name = 'slidinguppanel',
     aar = 'extlibs/slidinguppanel.aar',
 )
@@ -188,6 +182,12 @@ android_prebuilt_aar(
     aar = 'extlibs/wpcomrest.aar',
 )
 
+android_prebuilt_aar(
+    name = 'design',
+    aar = 'extlibs/design.aar',
+)
+
+
 ### WordPressUtils
 
 android_build_config(
@@ -207,8 +207,8 @@ r_android_library(
     deps = [
         ':android-support-v4',
         ':wpandroid-utils-res',
-        ':build-config-utils',
         ':all-jars',
+        ':build-config-utils',
     ]
 )
 
@@ -273,6 +273,7 @@ android_resource(
     res = 'WordPress/src/main/res',
     assets = 'WordPress/src/main/assets',
     deps = [
+        ':passcodelock',
         ':appcompat-v7',
         ':wpandroid-utils',
         ':wpandroid-utils-res',
@@ -294,6 +295,7 @@ r_android_library(
     srcs = glob(['WordPress/src/main/java/org/**/*.java']),
     deps = [
         ':wpandroid-editor-res',
+        ':passcodelock',
         ':zres',
         ':all-jars',
         ':appcompat-v7',
@@ -311,9 +313,8 @@ r_android_library(
         ':drag-sort-listview',
         ':simperium',
         ':mediapicker',
-        ':undobar',
+        ':design',
         ':slidinguppanel',
-        ':passcodelock',
         ':wpnetworking',
         ':helpshift',
         ':emailchecker',
