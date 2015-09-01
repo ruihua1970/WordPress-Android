@@ -22,11 +22,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.wordpress.android.util.AppLog.T;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -34,6 +30,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ImageUtils {
     public static int[] getImageSize(Uri uri, Context context){
@@ -91,7 +90,7 @@ public class ImageUtils {
                 cur.close();
             }
         } catch (Exception errReadingContentResolver) {
-            AppLog.e(AppLog.T.UTILS, errReadingContentResolver);
+            AppLog.e(T.UTILS, errReadingContentResolver);
         }
 
         if (orientation == 0) {
@@ -107,7 +106,7 @@ public class ImageUtils {
         try {
             exif = new ExifInterface(path);
         } catch (IOException e) {
-            AppLog.e(AppLog.T.UTILS, e);
+            AppLog.e(T.UTILS, e);
             return 0;
         }
 
@@ -127,39 +126,40 @@ public class ImageUtils {
         }
     }
 
-    public static Bitmap downloadBitmap(String url) {
-        final DefaultHttpClient client = new DefaultHttpClient();
-
-        final HttpGet getRequest = new HttpGet(url);
-
+    public static Bitmap downloadBitmap(String stringUrl) {
         try {
-            HttpResponse response = client.execute(getRequest);
-            final int statusCode = response.getStatusLine().getStatusCode();
-            if (statusCode != HttpStatus.SC_OK) {
-                AppLog.w(AppLog.T.UTILS, "ImageDownloader Error " + statusCode
-                        + " while retrieving bitmap from " + url);
-                return null;
-            }
+            final URL url = new URL(stringUrl);
+            final HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
+            try {
+                int responseCode = httpConnection.getResponseCode();
+                if (responseCode != HttpURLConnection.HTTP_OK) {
+                    AppLog.w(T.UTILS, "ImageDownloader Error " + responseCode
+                            + " while retrieving bitmap from " + url);
+                    return null;
+                }
 
-            final HttpEntity entity = response.getEntity();
-            if (entity != null) {
                 InputStream inputStream = null;
                 try {
-                    inputStream = entity.getContent();
+                    inputStream = httpConnection.getInputStream();
                     return BitmapFactory.decodeStream(inputStream);
                 } finally {
                     if (inputStream != null) {
                         inputStream.close();
                     }
-                    entity.consumeContent();
                 }
+            } catch (Exception e) {
+                // Could provide a more explicit error message for IOException or
+                // IllegalStateException
+                AppLog.w(T.UTILS, "ImageDownloader Error while retrieving bitmap from " + url);
+            } finally {
+                httpConnection.disconnect();
             }
-        } catch (Exception e) {
-            // Could provide a more explicit error message for IOException or
-            // IllegalStateException
-            getRequest.abort();
-            AppLog.w(AppLog.T.UTILS, "ImageDownloader Error while retrieving bitmap from " + url);
+        } catch (MalformedURLException e1) {
+            AppLog.e(T.UTILS, e1);
+        } catch (IOException e2) {
+            AppLog.e(T.UTILS, e2);
         }
+
         return null;
     }
 
@@ -240,17 +240,17 @@ public class ImageUtils {
                 try {
                     Bitmap bmp = BitmapFactory.decodeStream(new FileInputStream(f), null, bfo);
                     if (bmp == null) {
-                        AppLog.e(AppLog.T.UTILS, "can't decode bitmap: " + f.getPath());
+                        AppLog.e(T.UTILS, "can't decode bitmap: " + f.getPath());
                         return null;
                     }
                     bitmapWidth = bmp.getWidth();
                     bitmapHeight = bmp.getHeight();
                     return Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), mat, true);
                 } catch (OutOfMemoryError oom) {
-                    AppLog.e(AppLog.T.UTILS, "OutOfMemoryError Error in setting image: " + oom);
+                    AppLog.e(T.UTILS, "OutOfMemoryError Error in setting image: " + oom);
                 }
             } catch (IOException e) {
-                AppLog.e(AppLog.T.UTILS, "Error in setting image", e);
+                AppLog.e(T.UTILS, "Error in setting image", e);
             }
 
             return null;
@@ -292,7 +292,7 @@ public class ImageUtils {
             try {
                 cur = ctx.getContentResolver().query(curStream, projection, null, null, null);
             } catch (Exception e1) {
-                AppLog.e(AppLog.T.UTILS, e1);
+                AppLog.e(T.UTILS, e1);
                 return null;
             }
             File jpeg;
@@ -362,7 +362,7 @@ public class ImageUtils {
                         return getScaledBitmapAtLongestSide(resizedBitmap, targetWidth);
                     }
                 } catch (OutOfMemoryError e) {
-                    AppLog.e(AppLog.T.UTILS, "OutOfMemoryError Error in setting image: " + e);
+                    AppLog.e(T.UTILS, "OutOfMemoryError Error in setting image: " + e);
                     return null;
                 }
             }
@@ -438,7 +438,7 @@ public class ImageUtils {
         try {
             BitmapFactory.decodeFile(filePath, optBounds);
         } catch (OutOfMemoryError e) {
-            AppLog.e(AppLog.T.UTILS, "OutOfMemoryError Error in setting image: " + e);
+            AppLog.e(T.UTILS, "OutOfMemoryError Error in setting image: " + e);
             return null;
         }
 
@@ -458,7 +458,7 @@ public class ImageUtils {
         try {
             bmpResized = BitmapFactory.decodeFile(filePath, optActual);
         } catch (OutOfMemoryError e) {
-            AppLog.e(AppLog.T.UTILS, "OutOfMemoryError Error in setting image: " + e);
+            AppLog.e(T.UTILS, "OutOfMemoryError Error in setting image: " + e);
             return null;
         }
 
@@ -499,11 +499,11 @@ public class ImageUtils {
             bmpRotated = Bitmap.createBitmap(bmpResized, 0, 0, bmpResized.getWidth(), bmpResized.getHeight(), matrix,
                     true);
         } catch (OutOfMemoryError e) {
-            AppLog.e(AppLog.T.UTILS, "OutOfMemoryError Error in setting image: " + e);
+            AppLog.e(T.UTILS, "OutOfMemoryError Error in setting image: " + e);
             return null;
         } catch (NullPointerException e) {
             // See: https://github.com/wordpress-mobile/WordPress-Android/issues/1844
-            AppLog.e(AppLog.T.UTILS, "Bitmap.createBitmap has thrown a NPE internally. This should never happen: " + e);
+            AppLog.e(T.UTILS, "Bitmap.createBitmap has thrown a NPE internally. This should never happen: " + e);
             return null;
         }
 
