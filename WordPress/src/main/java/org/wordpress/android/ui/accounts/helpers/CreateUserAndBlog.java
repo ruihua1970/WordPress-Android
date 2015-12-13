@@ -110,7 +110,8 @@ public class CreateUserAndBlog {
     }
 
     private void validateUser() {
-        String path = "users/new";
+        //String path = "users/new";
+        String path = "users";
         Map<String, String> params = new HashMap<String, String>();
         params.put("username", mUsername);
         params.put("password", mPassword);
@@ -137,7 +138,8 @@ public class CreateUserAndBlog {
     }
 
     private void createUser() {
-        String path = "users/new";
+        //String path = "users/new";
+        String path = "users";
         Map<String, String> params = new HashMap<String, String>();
         params.put("username", mUsername);
         params.put("password", mPassword);
@@ -171,7 +173,7 @@ public class CreateUserAndBlog {
     }
 
     private void createBlog() {
-        String path = "sites/new";
+        String path = "sites";
         Map<String, String> params = new HashMap<String, String>();
         params.put("blog_name", mSiteUrl);
         params.put("blog_title", mSiteName);
@@ -217,7 +219,8 @@ public class CreateUserAndBlog {
             try {
                 if (mStep == Step.AUTHENTICATE_USER) {
                     mCallback.onStepFinished(Step.AUTHENTICATE_USER);
-                    createBlog();
+                    mCallback.onSuccess(response);
+                    //createBlog();
                 } else {
                     // steps VALIDATE_USER and VALIDATE_SITE could be run simultaneously in
                     // CREATE_USER_AND_BLOG mode
@@ -225,21 +228,19 @@ public class CreateUserAndBlog {
                         switch (mStep) {
                             case VALIDATE_USER:
                                 mCallback.onStepFinished(Step.VALIDATE_USER);
-                                validateSite();
-                                break;
-                            case VALIDATE_SITE:
-                                mCallback.onStepFinished(Step.VALIDATE_SITE);
                                 if (mMode == Mode.CREATE_BLOG_ONLY) {
                                     createBlog();
                                 } else {
                                     createUser();
                                 }
                                 break;
+
                             case CREATE_USER:
                                 mCallback.onStepFinished(Step.CREATE_USER);
                                 authenticateUser();
                                 break;
                             case CREATE_SITE:
+
                                 mCallback.onStepFinished(Step.CREATE_SITE);
                                 mCallback.onSuccess(response);
                                 break;

@@ -59,6 +59,7 @@ public class ReaderBlog {
             blog.feedId = json.optLong("feed_ID");
             blog.setName(JSONUtils.getStringDecoded(json, "name"));
             blog.setDescription(JSONUtils.getStringDecoded(json, "description"));
+            blog.setImageUrl(JSONUtils.getString(json, "avatar_URL"));
             blog.setUrl(JSONUtils.getString(json, "URL"));
             blog.setFeedUrl(JSONUtils.getString(json, "feed_URL"));
             blog.isJetpack = JSONUtils.getBool(json, "jetpack");

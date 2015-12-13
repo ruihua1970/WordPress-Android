@@ -66,10 +66,9 @@ android {
 
 dependencies {
     compile 'com.crashlytics.sdk.android:crashlytics:2.2.2'
-
     // Provided by maven central
-    compile ('org.wordpress:mediapicker:1.2.4') {
-        exclude group:'com.android.support'
+    compile('org.wordpress:mediapicker:1.2.4') {
+        exclude group: 'com.android.support'
     }
     compile 'com.google.code.gson:gson:2.2.2'
     compile 'org.ccil.cowan.tagsoup:tagsoup:1.2.1'
@@ -81,32 +80,31 @@ dependencies {
     compile 'com.github.chrisbanes.photoview:library:1.2.4'
     compile 'com.helpshift:android-aar:3.8.0'
     compile 'de.greenrobot:eventbus:2.4.0'
-    compile 'com.automattic:rest:1.0.2'
     compile 'org.wordpress:graphview:3.4.0'
     compile 'org.wordpress:persistentedittext:1.0.1'
-
     androidTestCompile 'com.google.dexmaker:dexmaker-mockito:1.0'
     androidTestCompile 'org.objenesis:objenesis:2.1'
     androidTestCompile 'org.mockito:mockito-core:+'
-
     // Provided by the WordPress-Android Repository
-    compile 'org.wordpress:gcm:1.0.0' // not found in maven central
-    compile 'org.wordpress:drag-sort-listview:0.6.1' // not found in maven central
-    compile 'org.wordpress:slidinguppanel:1.0.0' // not found in maven central
+    compile 'org.wordpress:gcm:1.0.0'
+    // not found in maven central
+    compile 'org.wordpress:drag-sort-listview:0.6.1'
+    // not found in maven central
+    compile 'org.wordpress:slidinguppanel:1.0.0'
+    // not found in maven central
     compile 'org.wordpress:passcodelock:1.0.0'
     compile 'org.wordpress:emailchecker:0.3'
-
     // Simperium
     compile 'com.simperium.android:simperium:0.6.6'
-
-    releaseCompile project(path:':libs:utils:WordPressUtils', configuration: 'release')
-    debugCompile project(path:':libs:utils:WordPressUtils', configuration: 'debug')
-    releaseCompile project(path:':libs:networking:WordPressNetworking', configuration: 'release')
-    debugCompile project(path:':libs:networking:WordPressNetworking', configuration: 'debug')
-    releaseCompile project(path:':libs:analytics:WordPressAnalytics', configuration: 'release')
-    debugCompile project(path:':libs:analytics:WordPressAnalytics', configuration: 'debug')
-    releaseCompile project(path:':libs:editor:WordPressEditor', configuration: 'release')
-    debugCompile project(path:':libs:editor:WordPressEditor', configuration: 'debug')
+    releaseCompile project(path: ':libs:utils:WordPressUtils', configuration: 'release')
+    debugCompile project(path: ':libs:utils:WordPressUtils', configuration: 'debug')
+    releaseCompile project(path: ':libs:networking:WordPressNetworking', configuration: 'release')
+    debugCompile project(path: ':libs:networking:WordPressNetworking', configuration: 'debug')
+    releaseCompile project(path: ':libs:analytics:WordPressAnalytics', configuration: 'release')
+    debugCompile project(path: ':libs:analytics:WordPressAnalytics', configuration: 'debug')
+    releaseCompile project(path: ':libs:editor:WordPressEditor', configuration: 'release')
+    debugCompile project(path: ':libs:editor:WordPressEditor', configuration: 'debug')
+    compile project(':libs:multi-image-selector')
 }
 
 configurations.all {

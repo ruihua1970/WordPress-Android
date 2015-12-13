@@ -69,6 +69,9 @@ import org.wordpress.android.util.helpers.MediaGalleryImageSpan;
 import org.wordpress.android.util.helpers.WPImageSpan;
 import org.wordpress.android.util.helpers.WPUnderlineSpan;
 import org.wordpress.android.util.widgets.WPEditText;
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
+///import org.wordpress.android.ui.media.MediaPickerActivity;
+//import me
 
 public class LegacyEditorFragment extends EditorFragmentAbstract implements TextWatcher,
         WPEditText.OnSelectionChangedListener, View.OnTouchListener {
@@ -410,7 +413,7 @@ public class LegacyEditorFragment extends EditorFragmentAbstract implements Text
     /**
      * Formatting bar
      */
-    private View.OnClickListener mFormatBarButtonClickListener = new View.OnClickListener() {
+    View.OnClickListener mFormatBarButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             int id = v.getId();
@@ -460,7 +463,10 @@ public class LegacyEditorFragment extends EditorFragmentAbstract implements Text
                 AnalyticsTracker.track(Stat.EDITOR_TAPPED_IMAGE);
                 mEditorFragmentListener.onAddMediaClicked();
                 if (isAdded()) {
-                    getActivity().openContextMenu(mAddPictureButton);
+                   getActivity().openContextMenu(mAddPictureButton);
+                   Intent intent = new Intent(getActivity(),MultiImageSelectorActivity.class);
+                   //startActivityForResult(intent, MediaPickerActivity.ACTIVITY_REQUEST_CODE_MEDIA_SELECTION);
+                   //getActivity().startMediaSelection();
                 }
             }
         }

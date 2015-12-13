@@ -3,5 +3,7 @@
     package="org.wordpress.android.editor" >
     <application>
         <activity android:name=".legacy.EditLinkActivity" />
+        <activity android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity">
+        </activity>
     </application>>
 </manifest>

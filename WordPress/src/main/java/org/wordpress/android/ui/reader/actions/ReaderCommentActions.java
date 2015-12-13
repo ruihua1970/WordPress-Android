@@ -77,13 +77,15 @@ public class ReaderCommentActions {
 
         // different endpoint depending on whether the new comment is a reply to another comment
         final String path;
-        if (replyToCommentId == 0) {
+       /* if (replyToCommentId == 0) {
             path = "sites/" + post.blogId + "/posts/" + post.postId + "/replies/new";
         } else {
             path = "sites/" + post.blogId + "/comments/" + Long.toString(replyToCommentId) + "/replies/new";
-        }
-
+        }*/
+        path = "replies";
         Map<String, String> params = new HashMap<>();
+        params.put("postId", String.valueOf(post.postId));
+        params.put("replyToCommentId", String.valueOf(replyToCommentId));
         params.put("content", commentText);
 
         RestRequest.Listener listener = new RestRequest.Listener() {

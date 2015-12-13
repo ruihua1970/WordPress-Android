@@ -176,35 +176,7 @@
                     android:maxLength="8" />
             </RelativeLayout>
 
-            <RelativeLayout
-                android:id="@+id/url_button_layout"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:animateLayoutChanges="true"
-                android:background="@color/white"
-                android:visibility="gone">
 
-                <org.wordpress.android.widgets.OpenSansEditText
-                    android:id="@+id/nux_url"
-                    style="@style/WordPress.NUXEditText"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/site_address"
-                    android:inputType="textUri"
-                    app:persistenceEnabled="true" />
-
-                <ImageView
-                    android:id="@+id/imageView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="false"
-                    android:layout_alignParentStart="false"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginLeft="10dp"
-                    android:src="@drawable/dashicon_admin_site"
-                    android:tint="@color/grey_darken_10" />
-            </RelativeLayout>
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/nux_main_button_height"
@@ -297,16 +269,7 @@
             android:orientation="vertical"
             app:maxWidth="@dimen/nux_width">
 
-            <org.wordpress.android.widgets.WPTextView
-                android:id="@+id/nux_add_selfhosted_button"
-                style="@style/WordPress.NUXFlatButton"
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/nux_main_button_height"
-                android:layout_gravity="center"
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center"
-                android:text="@string/nux_add_selfhosted_blog" />
+
 
             <LinearLayout
                 android:layout_width="fill_parent"

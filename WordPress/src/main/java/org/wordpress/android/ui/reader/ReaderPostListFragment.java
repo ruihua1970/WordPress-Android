@@ -62,6 +62,7 @@ import java.util.Stack;
 
 import de.greenrobot.event.EventBus;
 
+
 public class ReaderPostListFragment extends Fragment
         implements ReaderInterfaces.OnPostSelectedListener,
                    ReaderInterfaces.OnTagSelectedListener,
@@ -91,6 +92,7 @@ public class ReaderPostListFragment extends Fragment
 
     private static boolean mHasPurgedReaderDb;
     private static Date mLastAutoUpdateDt;
+
 
     private final HistoryStack mTagPreviewHistory = new HistoryStack("tag_preview_history");
 
@@ -416,6 +418,7 @@ public class ReaderPostListFragment extends Fragment
 
         return rootView;
     }
+
 
     private void scrollRecycleViewToPosition(int position) {
         if (!isAdded() || mRecyclerView == null) return;

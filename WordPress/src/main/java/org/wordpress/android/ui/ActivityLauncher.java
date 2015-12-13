@@ -19,6 +19,7 @@ import org.wordpress.android.ui.accounts.NewAccountActivity;
 import org.wordpress.android.ui.accounts.NewBlogActivity;
 import org.wordpress.android.ui.accounts.SignInActivity;
 import org.wordpress.android.ui.comments.CommentsActivity;
+import org.wordpress.android.ui.contacts.ContactsContactListActivity;
 import org.wordpress.android.ui.main.SitePickerActivity;
 import org.wordpress.android.ui.media.MediaBrowserActivity;
 import org.wordpress.android.ui.media.WordPressMediaUtils;
@@ -73,6 +74,12 @@ public class ActivityLauncher {
         Intent intent = new Intent(context, PostsListActivity.class);
         slideInFromRight(context, intent);
         AnalyticsTracker.track(AnalyticsTracker.Stat.OPENED_POSTS);
+    }
+
+    public static void viewContactsList(Context context) {
+        Intent intent = new Intent(context, ContactsContactListActivity.class);
+        slideInFromRight(context, intent);
+        //AnalyticsTracker.track(AnalyticsTracker.Stat.OPENED_POSTS);
     }
 
     public static void viewCurrentBlogMedia(Context context) {

@@ -14,6 +14,7 @@ import android.text.Editable;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -121,7 +122,7 @@ public class SignInFragment extends AbstractFragment implements TextWatcher {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.signin_fragment, container, false);
-        mUrlButtonLayout = (RelativeLayout) rootView.findViewById(R.id.url_button_layout);
+        //mUrlButtonLayout = (RelativeLayout) rootView.findViewById(R.id.url_button_layout);
         mTwoStepLayout = (RelativeLayout) rootView.findViewById(R.id.two_factor_layout);
         mTwoStepFooter = (LinearLayout) rootView.findViewById(R.id.two_step_footer);
         mUsernameLayout = (RelativeLayout) rootView.findViewById(R.id.nux_username_layout);
@@ -136,15 +137,15 @@ public class SignInFragment extends AbstractFragment implements TextWatcher {
         mPasswordEditText.addTextChangedListener(this);
         mPasswordEditText.setOnClickListener(mOnLoginFormClickListener);
         mJetpackAuthLabel = (WPTextView) rootView.findViewById(R.id.nux_jetpack_auth_label);
-        mUrlEditText = (EditText) rootView.findViewById(R.id.nux_url);
+        //mUrlEditText = (EditText) rootView.findViewById(R.id.nux_url);
         mSignInButton = (WPTextView) rootView.findViewById(R.id.nux_sign_in_button);
         mSignInButton.setOnClickListener(mSignInClickListener);
         mProgressBarSignIn = (RelativeLayout) rootView.findViewById(R.id.nux_sign_in_progress_bar);
         mProgressTextSignIn = (WPTextView) rootView.findViewById(R.id.nux_sign_in_progress_text);
         mCreateAccountButton = (WPTextView) rootView.findViewById(R.id.nux_create_account_button);
         mCreateAccountButton.setOnClickListener(mCreateAccountListener);
-        mAddSelfHostedButton = (WPTextView) rootView.findViewById(R.id.nux_add_selfhosted_button);
-        mAddSelfHostedButton.setOnClickListener(new OnClickListener() {
+        //mAddSelfHostedButton = (WPTextView) rootView.findViewById(R.id.nux_add_selfhosted_button);
+       /* mAddSelfHostedButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mUrlButtonLayout.getVisibility() == View.VISIBLE) {
@@ -157,7 +158,7 @@ public class SignInFragment extends AbstractFragment implements TextWatcher {
                     mSelfHosted = true;
                 }
             }
-        });
+        });*/
 
         mForgotPassword = (WPTextView) rootView.findViewById(R.id.forgot_password);
         mForgotPassword.setOnClickListener(mForgotPasswordListener);
@@ -170,7 +171,7 @@ public class SignInFragment extends AbstractFragment implements TextWatcher {
         });
 
         mPasswordEditText.setOnEditorActionListener(mEditorAction);
-        mUrlEditText.setOnEditorActionListener(mEditorAction);
+        //mUrlEditText.setOnEditorActionListener(mEditorAction);
 
         mTwoStepEditText = (EditText) rootView.findViewById(R.id.nux_two_step);
         mTwoStepEditText.addTextChangedListener(this);
@@ -219,8 +220,8 @@ public class SignInFragment extends AbstractFragment implements TextWatcher {
      * edit box
      */
     public void forceSelfHostedMode() {
-        mUrlButtonLayout.setVisibility(View.VISIBLE);
-        mAddSelfHostedButton.setVisibility(View.GONE);
+        //mUrlButtonLayout.setVisibility(View.VISIBLE);
+        //mAddSelfHostedButton.setVisibility(View.GONE);
         mCreateAccountButton.setVisibility(View.GONE);
         mSelfHosted = true;
     }
@@ -237,7 +238,7 @@ public class SignInFragment extends AbstractFragment implements TextWatcher {
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), HelpActivity.class);
                 // Used to pass data to an eventual support service
-                intent.putExtra(ENTERED_URL_KEY, EditTextUtils.getText(mUrlEditText));
+                //intent.putExtra(ENTERED_URL_KEY, EditTextUtils.getText(mUrlEditText));
                 intent.putExtra(ENTERED_USERNAME_KEY, EditTextUtils.getText(mUsernameEditText));
                 intent.putExtra(HelpshiftHelper.ORIGIN_KEY, Tag.ORIGIN_LOGIN_SCREEN_HELP);
                 startActivity(intent);
@@ -316,12 +317,12 @@ public class SignInFragment extends AbstractFragment implements TextWatcher {
             mJetpackAuthLabel.setText(customAuthMessage);
         }
 
-        if (mAddSelfHostedButton != null) {
+       /* if (mAddSelfHostedButton != null) {
             mJetpackAuthLabel.setVisibility(View.VISIBLE);
             mAddSelfHostedButton.setVisibility(View.GONE);
             mCreateAccountButton.setVisibility(View.GONE);
             mUsernameEditText.setText("");
-        }
+        }*/
     }
 
     private final View.OnClickListener mCreateAccountListener = new View.OnClickListener() {
@@ -421,10 +422,10 @@ public class SignInFragment extends AbstractFragment implements TextWatcher {
             if (!isAdded()) {
                 return;
             }
-
             if (userBlogList != null) {
                 if (isWPComLogin()) {
                     BlogUtils.addBlogs(userBlogList, mUsername);
+                    //Log.d("ggg3", userBlogList.toString());
                 } else {
                     BlogUtils.addBlogs(userBlogList, mUsername, mPassword, mHttpUsername, mHttpPassword);
                 }
@@ -717,8 +718,8 @@ public class SignInFragment extends AbstractFragment implements TextWatcher {
         mUsernameEditText.setEnabled(false);
         mPasswordEditText.setEnabled(false);
         mTwoStepEditText.setEnabled(false);
-        mUrlEditText.setEnabled(false);
-        mAddSelfHostedButton.setEnabled(false);
+       // mUrlEditText.setEnabled(false);
+//        mAddSelfHostedButton.setEnabled(false);
         mCreateAccountButton.setEnabled(false);
         mForgotPassword.setEnabled(false);
     }
@@ -730,8 +731,8 @@ public class SignInFragment extends AbstractFragment implements TextWatcher {
         mUsernameEditText.setEnabled(true);
         mPasswordEditText.setEnabled(true);
         mTwoStepEditText.setEnabled(true);
-        mUrlEditText.setEnabled(true);
-        mAddSelfHostedButton.setEnabled(true);
+        //mUrlEditText.setEnabled(true);
+        //mAddSelfHostedButton.setEnabled(true);
         mCreateAccountButton.setEnabled(true);
         mForgotPassword.setEnabled(true);
     }

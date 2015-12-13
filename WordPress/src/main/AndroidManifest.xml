@@ -202,6 +202,9 @@
         <activity android:name=".ui.media.MediaGalleryPickerActivity">
         </activity>
 
+        <activity android:name="me.nereo.multi_image_selector.MultiImageSelectorActivity">
+        </activity>
+
         <!-- Theme Activities -->
         <activity
             android:name=".ui.themes.ThemeBrowserActivity"

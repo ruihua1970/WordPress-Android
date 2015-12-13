@@ -1,10 +1,19 @@
 package org.wordpress.android.ui.reader.views;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Outline;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
+import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import org.wordpress.android.R;
@@ -13,9 +22,13 @@ import org.wordpress.android.models.ReaderBlog;
 import org.wordpress.android.ui.reader.actions.ReaderActions;
 import org.wordpress.android.ui.reader.actions.ReaderBlogActions;
 import org.wordpress.android.ui.reader.utils.ReaderUtils;
+import org.wordpress.android.util.GravatarUtils;
 import org.wordpress.android.util.NetworkUtils;
 import org.wordpress.android.util.ToastUtils;
 import org.wordpress.android.util.UrlUtils;
+import org.wordpress.android.widgets.WPNetworkImageView;
+
+import me.nereo.multi_image_selector.MultiImageSelectorActivity;
 
 /**
  * topmost view in post adapter when showing blog preview - displays description, follower
@@ -32,10 +45,13 @@ public class ReaderBlogInfoView extends LinearLayout {
     private ReaderFollowButton mFollowButton;
     private ReaderBlog mBlogInfo;
     private OnBlogInfoLoadedListener mBlogInfoListener;
+    private ViewGroup mAvatarFrame;
+    private int mAvatarSzLarge;
 
     public ReaderBlogInfoView(Context context) {
         super(context);
         initView(context);
+        mAvatarSzLarge = context.getResources().getDimensionPixelSize(R.dimen.avatar_sz_large);
     }
 
     public ReaderBlogInfoView(Context context, AttributeSet attrs) {
@@ -105,13 +121,56 @@ public class ReaderBlogInfoView extends LinearLayout {
         TextView txtDomain = (TextView) layoutInfo.findViewById(R.id.text_domain);
         TextView txtDescription = (TextView) layoutInfo.findViewById(R.id.text_blog_description);
         TextView txtFollowCount = (TextView) layoutInfo.findViewById(R.id.text_blog_follow_count);
+        mAvatarFrame = (ViewGroup) layoutInfo.findViewById(R.id.frame_avatar);
+        WPNetworkImageView mAvatarImageView = (WPNetworkImageView) layoutInfo.findViewById(R.id.image_avatar);
+
+        addDropShadowToAvatar();
 
         if (blogInfo.hasName()) {
             txtBlogName.setText(blogInfo.getName());
         } else {
             txtBlogName.setText(R.string.reader_untitled_post);
         }
+        if (blogInfo.hasImageUrl()) {
+            //String imageUrl = GravatarUtils.blavatarFromUrl(blogInfo.getImageUrl(), mAvatarSzLarge);
+            //mAvatarImageView.setImageUrl(imageUrl, WPNetworkImageView.ImageType.BLAVATAR);
+            String avatarUrl = GravatarUtils.fixGravatarUrl(blogInfo.getImageUrl(), mAvatarSzLarge);
+            mAvatarImageView.setImageUrl(avatarUrl, WPNetworkImageView.ImageType.AVATAR);
+            mAvatarImageView.setOnClickListener(new View.OnClickListener(){
+                private PopupWindow mUpdateAvatarImage;
+                private Context context;
+                @Override
+                public void onClick(View v) {
+                    //int width = getResources().getDimensionPixelSize(R.dimen.action_bar_spinner_width);
+                    //mUpdateAvatarImage = new PopupWindow(layoutView, width, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+                    //mUpdateAvatarImage.setBackgroundDrawable(new ColorDrawable());
+                    context = v.getContext();
+                    int selectedMode = MultiImageSelectorActivity.MODE_SINGLE;
 
+                    boolean showCamera = true;
+
+                    int maxNum = 9;
+                    /*if(!TextUtils.isEmpty(mRequestNum.getText())){
+                        maxNum = Integer.valueOf(mRequestNum.getText().toString());
+                    }*/
+
+                    Intent intent = new Intent(context, MultiImageSelectorActivity.class);
+                    // 是否显示拍摄图片
+                    intent.putExtra(MultiImageSelectorActivity.EXTRA_SHOW_CAMERA, showCamera);
+                    // 最大可选择图片数量
+                    intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_COUNT, maxNum);
+                    // 选择模式
+                    intent.putExtra(MultiImageSelectorActivity.EXTRA_SELECT_MODE, selectedMode);
+                    // 默认选择
+                   /* if(mSelectPath != null && mSelectPath.size()>0){
+                        intent.putExtra(MultiImageSelectorActivity.EXTRA_DEFAULT_SELECTED_LIST, mSelectPath);
+                    }
+                    context.startActivityForResult(intent, REQUEST_IMAGE);*/
+                }
+            });
+        } else {
+            //mAvatarImageView.setImageUrl(post.getPostAvatarForDisplay(mAvatarSzMedium), WPNetworkImageView.ImageType.AVATAR);
+        }
         if (blogInfo.hasUrl()) {
             txtDomain.setText(UrlUtils.getDomainFromUrl(blogInfo.getUrl()));
             txtDomain.setVisibility(View.VISIBLE);
@@ -147,6 +206,23 @@ public class ReaderBlogInfoView extends LinearLayout {
 
         if (mBlogInfoListener != null) {
             mBlogInfoListener.onBlogInfoLoaded(blogInfo);
+        }
+    }
+
+
+    /**
+     * adds a circular drop shadow to the avatar's parent view (Lollipop+ only)
+     */
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void addDropShadowToAvatar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mAvatarFrame.setOutlineProvider(new ViewOutlineProvider() {
+                @Override
+                public void getOutline(View view, Outline outline) {
+                    outline.setOval(0, 0, view.getWidth(), view.getHeight());
+                }
+            });
+            mAvatarFrame.setElevation(mAvatarFrame.getResources().getDimensionPixelSize(R.dimen.card_elevation));
         }
     }
 

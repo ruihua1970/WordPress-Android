@@ -160,7 +160,8 @@ public class ReaderPostService extends Service {
     private static void requestPostsWithTag(final ReaderTag tag,
                                             final UpdateAction updateAction,
                                             final UpdateResultListener resultListener) {
-        String path = getRelativeEndpointForTag(tag);
+        //String path = getRelativeEndpointForTag(tag);
+        String path = "posts";
         if (TextUtils.isEmpty(path)) {
             resultListener.onUpdateResult(UpdateResult.FAILED);
             return;

@@ -63,12 +63,23 @@ public class ReaderPostActions {
         ReaderLikeTable.setCurrentUserLikesPost(post, isAskingToLike);
 
         final String actionName = isAskingToLike ? "like" : "unlike";
-        String path = "sites/" + post.blogId + "/posts/" + post.postId + "/likes/";
+       /* String path = "sites/" + post.blogId + "/posts/" + post.postId + "/likes/";
         if (isAskingToLike) {
             path += "new";
         } else {
             path += "mine/delete";
+        }*/
+
+        String path;
+        if (isAskingToLike) {
+            path = "like";
+        } else {
+            path = "unlike";
         }
+
+        Map<String, String> params = new HashMap<>();
+        params.put("object_model", "Post");
+        params.put("object_id", String.valueOf(post.postId));
 
         com.wordpress.rest.RestRequest.Listener listener = new RestRequest.Listener() {
             @Override
@@ -92,7 +103,8 @@ public class ReaderPostActions {
             }
         };
 
-        WordPress.getRestClientUtilsV1_1().post(path, listener, errorListener);
+        //WordPress.getRestClientUtilsV1_1().post(path, listener, errorListener);
+        WordPress.getRestClientUtilsV1_1().post(path, params, null, listener, errorListener);
         return true;
     }
 

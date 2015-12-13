@@ -1407,7 +1407,7 @@ public class EditPostActivity extends AppCompatActivity implements EditorFragmen
         imageMediaSources.add(new MediaSourceDeviceImages());
 
         return imageMediaSources;
-    }
+}
 
     private ArrayList<MediaSource> blogImageMediaSelectionSources() {
         ArrayList<MediaSource> imageMediaSources = new ArrayList<>();
@@ -1500,7 +1500,7 @@ public class EditPostActivity extends AppCompatActivity implements EditorFragmen
     /**
      * Starts {@link org.wordpress.android.ui.media.MediaPickerActivity} after refreshing the blog media.
      */
-    private void startMediaSelection() {
+    public void startMediaSelection() {
         Intent intent = new Intent(this, MediaPickerActivity.class);
         intent.putExtra(MediaPickerActivity.ACTIVITY_TITLE_KEY, getString(R.string.add_to_post));
         intent.putParcelableArrayListExtra(MediaPickerActivity.DEVICE_IMAGE_MEDIA_SOURCES_KEY,

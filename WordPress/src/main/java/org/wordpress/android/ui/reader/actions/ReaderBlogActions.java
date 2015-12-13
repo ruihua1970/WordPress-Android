@@ -311,7 +311,7 @@ public class ReaderBlogActions {
         };
 
         if (hasBlogId) {
-            WordPress.getRestClientUtilsV1_1().get("read/sites/" + blogId, listener, errorListener);
+            WordPress.getRestClientUtilsV1_1().get("sites/" + blogId, listener, errorListener);
         } else {
             WordPress.getRestClientUtilsV1_1().get("read/sites/" + UrlUtils.urlEncode(UrlUtils.getDomainFromUrl(blogUrl)), listener, errorListener);
         }
